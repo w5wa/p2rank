@@ -105,7 +105,12 @@ class ProteinPrepHelper implements Parametrized {
 
     private static List<String> readLines(String path) {
         if (Futils.isCompressed(path)) {
-            return Futils.inputStream(path).text.readLines()
+            InputStream is = Futils.inputStream(path)
+            try {
+                return is.text.readLines()
+            } finally {
+                is.close()
+            }
         }
         return new File(path).readLines()
     }

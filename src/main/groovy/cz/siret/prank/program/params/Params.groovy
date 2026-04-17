@@ -1644,7 +1644,7 @@ class Params {
     String vina_command = "vina"
 
     /**
-     * SMILES string or path to a ligand file (.pdbqt/.sdf/.mol2) to dock.
+     * Path to a ligand file (.pdbqt / .sdf / .mol2) to dock.
      * When docking via 'prank vina-dock' this value is required.
      */
     @RuntimeParam
