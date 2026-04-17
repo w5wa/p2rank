@@ -21,6 +21,7 @@ It achieves high prediction success rates without relying on external software f
 ### ✨ What's new?
   
 * Version **2.5** brings speed optimizations (~2x faster prediction), ChimeraX visualizations, and improvements to rescoring (`fpocket-rescore` command).
+* Integration with **DockVina** adds end-to-end docking support via the `vina-dock` command.
 * Version **2.4.2** adds support for BinaryCIF (`.bcif`) input and rescoring of fpocket predictions in `.cif` format.          
 * Version **2.4** adds support for mmCIF (`.cif`) input and contains a special profile for predictions on AlphaFold models and NMR/cryo-EM structures.  
 
@@ -193,9 +194,9 @@ In this case, the dataset file can be a simple list of pdb/cif files since Fpock
 `prank fpocket-rescore` will produce `predictions.csv` as well, so it can be used as an in-place replacement for `prank predict` in most scenarios.
 Note: if you use `fpocket-rescore`, please cite Fpocket as well.
 
-### Vina Docking
+### DockVina Integration
 
-P2Rank integrates with [AutoDock Vina](https://vina.scripps.edu/) through the `vina-dock` command.
+P2Rank integrates with **DockVina** (built on [AutoDock Vina](https://vina.scripps.edu/)) through the `vina-dock` command.
 The pipeline covers the full docking workflow in one step:
 
 1. **Protein preparation** — removes waters and heteroatoms, writes a Vina-ready `.pdbqt` receptor.
