@@ -1633,6 +1633,118 @@ class Params {
     List<String> extra_output = []
 
 //===========================================================================================================//
+// Vina docking parameters
+//===========================================================================================================//
+
+    /**
+     * Command (or absolute path) used to invoke AutoDock Vina or Vina-compatible binary
+     * when running 'prank vina-dock'. Can contain custom arguments.
+     */
+    @RuntimeParam
+    String vina_command = "vina"
+
+    /**
+     * SMILES string or path to a ligand file (.pdbqt/.sdf/.mol2) to dock.
+     * When docking via 'prank vina-dock' this value is required.
+     */
+    @RuntimeParam
+    String vina_ligand = ""
+
+    /**
+     * Docking box center X coordinate (Angstroms). Used in normal (non-P2Rank-guided) mode.
+     */
+    @RuntimeParam
+    double vina_center_x = 0.0
+
+    /**
+     * Docking box center Y coordinate (Angstroms). Used in normal (non-P2Rank-guided) mode.
+     */
+    @RuntimeParam
+    double vina_center_y = 0.0
+
+    /**
+     * Docking box center Z coordinate (Angstroms). Used in normal (non-P2Rank-guided) mode.
+     */
+    @RuntimeParam
+    double vina_center_z = 0.0
+
+    /**
+     * Docking box size along X axis (Angstroms).
+     */
+    @RuntimeParam
+    double vina_size_x = 20.0
+
+    /**
+     * Docking box size along Y axis (Angstroms).
+     */
+    @RuntimeParam
+    double vina_size_y = 20.0
+
+    /**
+     * Docking box size along Z axis (Angstroms).
+     */
+    @RuntimeParam
+    double vina_size_z = 20.0
+
+    /**
+     * Maximum number of binding modes to generate in Vina output.
+     */
+    @RuntimeParam
+    int vina_num_modes = 9
+
+    /**
+     * Energy range (kcal/mol) used to filter Vina poses relative to the best pose.
+     */
+    @RuntimeParam
+    double vina_energy_range = 3.0
+
+    /**
+     * Exhaustiveness of local search. Higher values are slower but more thorough.
+     */
+    @RuntimeParam
+    int vina_exhaustiveness = 8
+
+    /**
+     * CPU cores dedicated to Vina search (0 = auto-detect).
+     */
+    @RuntimeParam
+    int vina_cpu = 0
+
+    /**
+     * Use P2Rank predicted pocket centers as docking box centers.
+     * When true, 'prank vina-dock' ignores vina_center_x/y/z and runs one docking
+     * job per selected pocket (up to vina_max_pockets).
+     */
+    @RuntimeParam
+    boolean vina_use_p2rank_pockets = true
+
+    /**
+     * Maximum number of top-ranked P2Rank pockets to use as docking box centers
+     * when vina_use_p2rank_pockets = true.
+     */
+    @RuntimeParam
+    int vina_max_pockets = 3
+
+    /**
+     * Remove water molecules (HOH/WAT) from the receptor before docking preparation.
+     */
+    @RuntimeParam
+    boolean vina_prep_remove_water = true
+
+    /**
+     * Remove HETATM records from the receptor before docking preparation.
+     * Set to false if you need to keep cofactors.
+     */
+    @RuntimeParam
+    boolean vina_prep_remove_heteroatoms = true
+
+    /**
+     * Keep Vina docking intermediate and output files (receptor .pdbqt, poses).
+     */
+    @RuntimeParam
+    boolean vina_keep_output = true
+
+//===========================================================================================================//
 // Derived parameters
 //===========================================================================================================//
 

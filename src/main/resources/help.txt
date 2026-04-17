@@ -9,6 +9,7 @@
      rescore       ... rescore previously detected pockets (PRANK)
      eval-rescore  ... evaluate rescoring model on a dataset with known ligands
      export-points ... export SAS points with feature vectors (no model needed)
+     vina-dock     ... prepare protein, predict binding sites (optional), and run AutoDock Vina docking
 
   datasets:
 
@@ -40,3 +41,32 @@
                             default: true
 
      -<param> <value>       for full list of parameters see config/default.groovy
+
+  vina-dock specific parameters:
+
+     -vina_ligand <path>              path to ligand .pdbqt file (required)
+     -vina_use_p2rank_pockets <0/1>   use P2Rank predicted pockets as docking box centers (default: 1)
+     -vina_max_pockets <int>          max number of P2Rank pockets to dock into (default: 3)
+     -vina_center_x/y/z <float>       explicit box center (used when vina_use_p2rank_pockets=0)
+     -vina_size_x/y/z <float>         box dimensions in Angstroms (default: 20 each)
+     -vina_exhaustiveness <int>       Vina search exhaustiveness (default: 8)
+     -vina_num_modes <int>            max output poses (default: 9)
+     -vina_command <cmd>              Vina binary command/path (default: vina)
+     -vina_keep_output <0/1>          keep intermediate docking files (default: 1)
+     -vina_prep_remove_water <0/1>    strip waters before docking (default: 1)
+     -vina_prep_remove_heteroatoms <0/1> strip HETATM records before docking (default: 1)
+
+  vina-dock examples:
+
+     # P2Rank-guided docking (predict pockets, dock into top-3)
+     prank vina-dock -f protein.pdb -vina_ligand ligand.pdbqt
+
+     # Normal Vina docking with explicit box
+     prank vina-dock -f protein.pdb -vina_ligand ligand.pdbqt \
+           -vina_use_p2rank_pockets 0 \
+           -vina_center_x 12.3 -vina_center_y 45.6 -vina_center_z 7.8 \
+           -vina_size_x 20 -vina_size_y 20 -vina_size_z 20
+
+     # Run on a dataset of proteins
+     prank vina-dock proteins.ds -vina_ligand ligand.pdbqt -vina_max_pockets 1
+
