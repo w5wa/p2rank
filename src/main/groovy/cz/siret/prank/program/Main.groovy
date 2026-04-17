@@ -18,6 +18,7 @@ import cz.siret.prank.program.routines.predict.ExportPointsRoutine
 import cz.siret.prank.program.routines.predict.PredictPocketsRoutine
 import cz.siret.prank.program.routines.predict.PredictResiduesRoutine
 import cz.siret.prank.program.routines.predict.RescorePocketsRoutine
+import cz.siret.prank.program.routines.predict.VinaDockingRoutine
 import cz.siret.prank.program.routines.results.EvalResults
 import cz.siret.prank.program.routines.traineval.*
 import cz.siret.prank.utils.*
@@ -351,6 +352,20 @@ class Main implements Parametrized, Writable {
         finalizeDatasetResult(result, outdir)
     }
 
+    void runVinaDock() {
+        Dataset dataset = loadDatasetOrFile()
+        String outdir = findOutdir("vina_dock_$dataset.label")
+        configureLoggers(outdir)
+        initParams(params, "$installDir/config/default.groovy")
+
+        Dataset.Result result = new VinaDockingRoutine(
+                dataset,
+                params.vina_use_p2rank_pockets ? findModel() : null,
+                outdir).execute()
+
+        finalizeDatasetResult(result, outdir)
+    }
+
     void runEvalRescore() {
         initRescoreDefaultParams()
         Dataset dataset = loadDataset()
@@ -465,6 +480,8 @@ class Main implements Parametrized, Writable {
             case 'rescore':         runRescore()
                 break
             case 'fpocket-rescore': runFpocketRescore()
+                break
+            case 'vina-dock':       runVinaDock()
                 break
             case 'eval-rescore':    runEvalRescore()
                 break

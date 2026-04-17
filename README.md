@@ -193,6 +193,35 @@ In this case, the dataset file can be a simple list of pdb/cif files since Fpock
 `prank fpocket-rescore` will produce `predictions.csv` as well, so it can be used as an in-place replacement for `prank predict` in most scenarios.
 Note: if you use `fpocket-rescore`, please cite Fpocket as well.
 
+### Vina Docking
+
+P2Rank integrates with [AutoDock Vina](https://vina.scripps.edu/) through the `vina-dock` command.
+The pipeline covers the full docking workflow in one step:
+
+1. **Protein preparation** — removes waters and heteroatoms, writes a Vina-ready `.pdbqt` receptor.
+2. **Binding-site prediction** (optional) — runs P2Rank and uses the predicted pocket centroids as Vina search-box centres.
+3. **Docking** — runs Vina for each search box.
+4. **Scoring and reporting** — parses Vina output, writes per-protein CSV summaries.
+
+~~~ruby
+# P2Rank-guided docking: predict pockets, dock into top-3 (default)
+prank vina-dock -f protein.pdb -vina_ligand ligand.pdbqt
+
+# Normal Vina docking with an explicit search box
+prank vina-dock -f protein.pdb -vina_ligand ligand.pdbqt \
+      -vina_use_p2rank_pockets 0 \
+      -vina_center_x 12.3 -vina_center_y 45.6 -vina_center_z 7.8 \
+      -vina_size_x 20 -vina_size_y 20 -vina_size_z 20
+
+# Dock on a dataset of proteins
+prank vina-dock proteins.ds -vina_ligand ligand.pdbqt -o docking_results/
+~~~
+
+**Requirements:** [AutoDock Vina ≥ 1.2](https://vina.scripps.edu/) must be installed and available on `PATH`
+(or specify its path with `-vina_command /path/to/vina`).
+
+See the [docking documentation](documentation/docking.md) for the full parameter reference, output format, and tips.
+
 ### Evaluate prediction and rescoring models
 
 Use following commands to calculate prediction metrics (prediction success rates using DCA, DCC, ...) on structure files, where the ligands are present.
